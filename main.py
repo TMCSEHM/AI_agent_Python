@@ -1,4 +1,5 @@
 import os
+import argparse
 
 from dotenv import load_dotenv
 from google import genai
@@ -10,13 +11,16 @@ def main():
         raise RuntimeError("GEMINI_API_KEY environment variable not set")
 
     client = genai.Client(api_key=api_key)
+    
+    parser = argparse.ArgumentParser(description = "AI_agent")
+    parser.add_argument("user_prompt", type = str, help = "User prompt")
+    args = parser.parse_args()
 
     model = "gemini-2.5-flash"
-    contents = "Why is Boot.dev such a great place to learn backend development? Use one paragraph maximum."
 
     response = client.models.generate_content(
             model = model,
-            contents = contents,
+            contents = args.user_prompt,
             )
     
     # Verify usage_metadata is not None

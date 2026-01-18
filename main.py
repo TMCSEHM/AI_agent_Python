@@ -4,6 +4,8 @@ import argparse
 from dotenv import load_dotenv
 from google import genai
 from google.genai import types
+from prompts import system_prompt
+from call_function import available_functions
 
 def main():
     parser = argparse.ArgumentParser(description = "AI Code Assistant")
@@ -29,6 +31,10 @@ def generate_content(client, messages, verbose):
     response = client.models.generate_content(
             model = g_model,
             contents = messages,
+            config = types.GenerateContentConfig(
+                tools=[available_functions],
+                system_instruction=system_prompt,
+                ),
             )
     # Verify usage_metadata is not None
     if not response.usage_metadata:
@@ -40,8 +46,15 @@ def generate_content(client, messages, verbose):
     if verbose:
         print(f"Prompt tokens: {prompt_tokens}")
         print(f"Response tokens: {candidate_tokens}")
-    print("Response:")
-    print(response.text)
+    
+    function_call = response.function_calls
+    if not function_call:
+        print("Response:")
+        print(response.text)
+        return
+    
+    for function in function_call:
+        print(f"Calling function: {function.name}({function.args})")
 
 if __name__ == "__main__":
     main()

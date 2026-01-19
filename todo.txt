@@ -1,0 +1,12 @@
+Extending the Project
+You've completed the required steps, but have some fun with it! (Carefully, though... be very cautious about giving an LLM access to your filesystem and Python interpreter.) See if you can get it to:
+
+Fix harder and more complex bugs
+Refactor sections of code
+Add entirely new features
+You can also try:
+
+Other LLM providers
+Other Gemini models
+Giving it more functions to call
+Other codebases (commit your changes before running the agent on a codebase, so you can always revert)
